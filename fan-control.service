@@ -1,0 +1,23 @@
+[Unit]
+Description=iDRAC fan control for uwu-pve
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/fan-control/fan-control.env
+ExecStart=/usr/local/bin/fan-control.sh
+Restart=always
+RestartSec=15
+# The TERM handler exits 143 by convention; that is a clean stop, not a failure.
+SuccessExitStatus=143
+# Give the network (and the iDRAC) a moment after a cold boot.
+ExecStartPre=/bin/sleep 30
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target
